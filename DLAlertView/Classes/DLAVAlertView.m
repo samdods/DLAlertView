@@ -13,7 +13,7 @@
 #import "DLAVAlertViewButtonTheme.h"
 #import "DLAVAlertViewController.h"
 
-static const CGFloat DLAVAlertViewThemeChangeDuration = 1.0;
+static const CGFloat DLAVAlertViewThemeChangeDuration = 10.0;
 static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 
 @interface DLAVAlertViewController ()
@@ -75,7 +75,9 @@ static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 		_buttonThemes = [NSMutableArray array];
 		
 		_dismissesOnBackdropTap = NO;
-		
+    
+    self.hidden = YES;
+    
 		_minContentWidth = 200.0;
 		_maxContentWidth = 270.0;
 		
@@ -759,6 +761,10 @@ static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 
 - (void)showAnimated:(BOOL)animated withCompletion:(void (^)(void))completion {
 	CAKeyframeAnimation *transformAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+  
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    self.hidden = NO;
+  });
 	
 	transformAnimation.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.20, 1.20, 1.00)],
 								  [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.05, 1.05, 1.00)],
@@ -771,7 +777,7 @@ static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 	
 	CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
 	animationGroup.animations = @[transformAnimation, opacityAnimation, opacityAnimation];
-	animationGroup.duration = 0.2;
+	animationGroup.duration = 0.3;
 	animationGroup.fillMode = kCAFillModeForwards;
 	animationGroup.removedOnCompletion = NO;
 	
@@ -955,7 +961,7 @@ static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 		}
 	} else if (self.alertViewStyle == DLAVAlertViewStyleLoginAndPasswordInput) {
 		if (doneButtonIndex != -1) {
-			doneButtonEnabled = [self textFieldTextAtIndex:0].length != 0 && [self textFieldTextAtIndex:1].length != 0;
+			doneButtonEnabled = [self textFieldTextAtIndex:0].length != 0 && [self textFieldTextAtIndex:1].length != 0;;
 		}
 	}
 	
@@ -981,11 +987,15 @@ static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 - (void)layoutSubviews  {
     BOOL animationsEnabled = [UIView areAnimationsEnabled];
     [UIView setAnimationsEnabled:NO];
-    
+  
     DLAVAlertViewTheme *theme = self.theme;
-    
+  
+  CGRect frame = self.contentView.frame;
+  
     self.clippingView.frame = self.bounds;
-    
+  
+  self.contentView.frame = frame;
+  
     CGSize alertSize = self.clippingView.frame.size;
     
     __block CGFloat offset = 0.0;
@@ -1027,7 +1037,7 @@ static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 	CGFloat titleHeight = [self titleHeight];
 	DLAVTextControlMargins titleMargins = theme.titleMargins;
     CGFloat titleBackgroundHeight = titleHeight + titleMargins.top + titleMargins.bottom;
-	CGRect titleBackgroundViewFrame = CGRectMake(0, *offset, alertSize.width, titleBackgroundHeight);
+	CGRect titleBackgroundViewFrame = CGRectMake(0, *offset, alertSize.width, titleBackgroundHeight);;
     self.titleBackgroundView.frame = titleBackgroundViewFrame;
 	CGRect titleLabelFrame = CGRectMake(titleMargins.left, *offset + titleMargins.top, alertSize.width - titleMargins.left - titleMargins.right, titleHeight);
 	self.titleLabel.frame = titleLabelFrame;

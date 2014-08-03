@@ -13,7 +13,7 @@
 #import "DLAVAlertViewButtonTheme.h"
 #import "DLAVAlertViewController.h"
 
-static const CGFloat DLAVAlertViewThemeChangeDuration = 10.0;
+static const CGFloat DLAVAlertViewThemeChangeDuration = 1.0;
 static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 
 @interface DLAVAlertViewController ()
@@ -961,7 +961,7 @@ static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 		}
 	} else if (self.alertViewStyle == DLAVAlertViewStyleLoginAndPasswordInput) {
 		if (doneButtonIndex != -1) {
-			doneButtonEnabled = [self textFieldTextAtIndex:0].length != 0 && [self textFieldTextAtIndex:1].length != 0;;
+			doneButtonEnabled = [self textFieldTextAtIndex:0].length != 0 && [self textFieldTextAtIndex:1].length != 0;
 		}
 	}
 	

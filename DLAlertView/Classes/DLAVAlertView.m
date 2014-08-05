@@ -655,6 +655,7 @@ static const CGFloat DLAVAlertViewAnimationDuration = 0.3;
 	
 	[self showAnimated:YES withCompletion:^{
 		[self didShowOrUnhide];
+		[self.contentView becomeFirstResponder];
 		
 		if ([self.delegate respondsToSelector:@selector(didPresentAlertView:)]) {
 			[self.delegate didPresentAlertView:self];
